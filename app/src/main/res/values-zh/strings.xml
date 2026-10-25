@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lap</string>
+
+    <!-- 主界面 -->
+    <string name="tagline">专注一圈</string>
+    <string name="dial_ready">准备开始</string>
+    <string name="dial_running">进行中</string>
+    <string name="dial_paused">已暂停</string>
+    <string name="dial_ringing">时间到</string>
+    <string name="dial_ringing_hint">点下方按钮关闭</string>
+    <string name="unit_minute_short">分</string>
+
+    <!-- 按钮 -->
+    <string name="action_start_minutes">开始 %1$d 分钟</string>
+    <string name="action_resume">继续</string>
+    <string name="action_restart">重新开始 %1$d 分钟</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_add">添加</string>
+    <string name="action_grant">去开启</string>
+
+    <!-- 档位 -->
+    <string name="presets_title">档位</string>
+    <string name="presets_edit">编辑</string>
+    <string name="presets_done">完成</string>
+    <string name="presets_edit_hint">点 × 删除</string>
+    <string name="presets_summary">当前选中 %1$d 分钟 · 共 %2$d 个档位</string>
+    <string name="presets_add">+ 自定义</string>
+    <string name="presets_add_title">添加档位</string>
+    <string name="presets_add_label">分钟数</string>
+    <string name="presets_add_range">范围 %1$d ~ %2$d 分钟</string>
+    <string name="cd_remove_preset">删除 %1$d 分钟档位</string>
+
+    <!-- 权限提示 -->
+    <string name="notif_perm_title">还需要通知权限</string>
+    <string name="notif_perm_body">通知栏和锁屏的媒体卡片靠通知权限显示。没有它，计时中看不到控件，只有响铃时才会短暂出现。</string>
+
+    <!-- 说明 -->
+    <string name="note_title">怎么工作</string>
+    <string name="note_body">点开始后由 Lap 自己计时，到点响铃、震动并点亮屏幕。\n\n锁屏和通知栏的媒体卡片可以直接控制：播放键开始或继续、暂停键暂停、停止键结束；进度条也能拖动，把剩余时间提前或推后。</string>
+
+    <!-- 通知 -->
+    <string name="channel_status">倒计时入口</string>
+    <string name="channel_status_desc">常驻通知，一键启动或暂停倒计时</string>
+    <string name="notif_title">Lap · %1$d 分钟</string>
+    <string name="notif_subtitle">点击播放开始倒计时</string>
+    <string name="notif_subtitle_paused">点播放重新开始</string>
+    <string name="media_subtitle">点击播放开始倒计时</string>
+    <string name="notif_title_ringing">⏰ 时间到 · %1$d 分钟</string>
+    <string name="notif_subtitle_ringing">点「关闭」结束这一轮</string>
+    <string name="media_subtitle_ringing">时间到</string>
+    <string name="media_subtitle_builtin_running">倒计时进行中</string>
+    <string name="notif_subtitle_builtin_paused">已暂停</string>
+    <string name="action_stop_ring">关闭</string>
+    <string name="minutes_value">%1$d 分钟</string>
+    <string name="action_start_timer">开始 %1$d 分钟</string>
+    <string name="action_pause">暂停</string>
+    <string name="cd_prev">上一个档位</string>
+    <string name="cd_next">下一个档位</string>
+
+    <!-- Toast -->
+    <string name="toast_preset_removed">已删除 %1$d 分钟档位</string>
+    <string name="toast_need_notif">请允许 Lap 发送通知，否则看不到倒计时控件</string>
+    <string name="toast_need_exact_alarm">需要「闹钟和提醒」权限才能精确计时</string>
+    <string name="toast_start_failed">无法启动倒计时</string>
+</resources>

@@ -196,7 +196,7 @@ private fun BrandHeader() {
         Spacer(Modifier.width(12.dp))
         Column {
             Text(
-                text = "Lap",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
             )

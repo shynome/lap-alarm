@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "looply.shynome.com"
+    namespace = "lap.shynome.com"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "looply.shynome.com"
+        applicationId = "lap.shynome.com"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

@@ -1,4 +1,4 @@
-package looply.shynome.com
+package lap.shynome.com
 
 import android.Manifest
 import android.content.Intent
@@ -18,11 +18,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import looply.shynome.com.core.AlarmScheduler
-import looply.shynome.com.core.Looply
-import looply.shynome.com.core.Store
-import looply.shynome.com.ui.LooplyScreen
-import looply.shynome.com.ui.theme.LooplyTheme
+import lap.shynome.com.core.AlarmScheduler
+import lap.shynome.com.core.Lap
+import lap.shynome.com.core.Store
+import lap.shynome.com.ui.LapScreen
+import lap.shynome.com.ui.theme.LapTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.RequestPermission(),
     ) { granted ->
         notifGranted = granted
-        Looply.refresh(this)
+        Lap.refresh(this)
         if (pendingStartAfterNotif) {
             pendingStartAfterNotif = false
             // 用户授权后直接把他刚才想开的那一轮开起来
@@ -45,25 +45,25 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Looply.init(this)
+        Lap.init(this)
         enableEdgeToEdge()
         notifGranted = notificationsEnabled()
 
         setContent {
-            LooplyTheme {
+            LapTheme {
                 val state by Store.state.collectAsState()
-                LooplyScreen(
+                LapScreen(
                     state = state,
                     notifGranted = notifGranted,
                     onStart = { startTimer() },
-                    onPause = { Looply.pauseTimer(this) },
-                    onResume = { Looply.resumeTimer(this) },
-                    onStop = { Looply.stopTimer(this) },
+                    onPause = { Lap.pauseTimer(this) },
+                    onResume = { Lap.resumeTimer(this) },
+                    onStop = { Lap.stopTimer(this) },
                     onRequestNotifications = { openNotificationSettings() },
-                    onSelectPreset = { Looply.setInterval(this, it) },
-                    onAddPreset = { Looply.addPreset(this, it) },
+                    onSelectPreset = { Lap.setInterval(this, it) },
+                    onAddPreset = { Lap.addPreset(this, it) },
                     onRemovePreset = { minutes ->
-                        Looply.removePreset(this, minutes)
+                        Lap.removePreset(this, minutes)
                         Toast.makeText(this, "已删除 $minutes 分钟档位", Toast.LENGTH_SHORT).show()
                     },
                 )
@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         exactAlarmGranted = AlarmScheduler.canScheduleExact(this)
         notifGranted = notificationsEnabled()
-        Looply.refresh(this)
+        Lap.refresh(this)
     }
 
     private fun notificationsEnabled(): Boolean =
@@ -124,7 +124,7 @@ class MainActivity : ComponentActivity() {
             !shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
         ) {
             // 已被永久拒绝，系统不会再弹框，只能引导去设置页
-            Toast.makeText(this, "请允许 Looply 发送通知，否则看不到倒计时控件", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "请允许 Lap 发送通知，否则看不到倒计时控件", Toast.LENGTH_LONG).show()
             openNotificationSettings()
             return false
         }
@@ -147,7 +147,7 @@ class MainActivity : ComponentActivity() {
             openExactAlarmSettings()
             return
         }
-        if (!Looply.startTimer(this)) {
+        if (!Lap.startTimer(this)) {
             Toast.makeText(this, "无法启动倒计时", Toast.LENGTH_LONG).show()
         }
     }

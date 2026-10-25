@@ -1,4 +1,4 @@
-package looply.shynome.com.ui.theme
+package lap.shynome.com.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -48,7 +48,7 @@ private val DarkColors = darkColorScheme(
 )
 
 @Composable
-fun LooplyTheme(
+fun LapTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {

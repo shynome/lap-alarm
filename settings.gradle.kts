@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "looply-alarm"
+rootProject.name = "lap-alarm"
 include(":app")

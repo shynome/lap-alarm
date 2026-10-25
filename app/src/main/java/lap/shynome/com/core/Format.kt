@@ -1,4 +1,4 @@
-package looply.shynome.com.core
+package lap.shynome.com.core
 
 import java.util.Locale
 

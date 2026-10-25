@@ -1,4 +1,4 @@
-package looply.shynome.com.ui
+package lap.shynome.com.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -57,12 +57,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import looply.shynome.com.R
-import looply.shynome.com.core.AppState
-import looply.shynome.com.core.formatRemaining
+import lap.shynome.com.R
+import lap.shynome.com.core.AppState
+import lap.shynome.com.core.formatRemaining
 
 @Composable
-fun LooplyScreen(
+fun LapScreen(
     state: AppState,
     notifGranted: Boolean,
     onStart: () -> Unit,
@@ -173,7 +173,7 @@ private fun BrandHeader() {
         Spacer(Modifier.width(12.dp))
         Column {
             Text(
-                text = "Looply",
+                text = "Lap",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
             )
@@ -608,7 +608,7 @@ private fun BehaviorNote() {
             Text("怎么工作", fontSize = 15.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(6.dp))
             Text(
-                text = "点开始后由 Looply 自己计时，到点响铃、震动并点亮屏幕。\n\n" +
+                text = "点开始后由 Lap 自己计时，到点响铃、震动并点亮屏幕。\n\n" +
                     "锁屏和通知栏的媒体卡片可以直接控制：播放键开始或继续、" +
                     "暂停键暂停、停止键结束；进度条也能拖动，把剩余时间提前或推后。",
                 style = MaterialTheme.typography.bodySmall,

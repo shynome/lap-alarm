@@ -1,10 +1,10 @@
-package looply.shynome.com.receiver
+package lap.shynome.com.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.view.KeyEvent
-import looply.shynome.com.core.MediaPlayback
+import lap.shynome.com.core.MediaPlayback
 
 /**
  * 把通知按钮发出的媒体按键转发给 MediaSession。

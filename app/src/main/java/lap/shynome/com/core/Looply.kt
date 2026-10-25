@@ -1,7 +1,7 @@
-package looply.shynome.com.core
+package lap.shynome.com.core
 
 import android.content.Context
-import looply.shynome.com.service.RingService
+import lap.shynome.com.service.RingService
 
 /**
  * 业务门面：档位维护与计时控制。
@@ -9,7 +9,7 @@ import looply.shynome.com.service.RingService
  * 计时由本应用自己负责：[AlarmScheduler] 登记系统级闹钟，到点后 [RingService] 响铃。
  * 全程不涉及跨应用跳转，因此在 MIUI 等限制后台拉起其他应用的 ROM 上也能正常工作。
  */
-object Looply {
+object Lap {
 
     fun init(context: Context) {
         Store.init(context)

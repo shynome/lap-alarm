@@ -1,12 +1,12 @@
-package looply.shynome.com.core
+package lap.shynome.com.core
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import looply.shynome.com.MainActivity
-import looply.shynome.com.receiver.AlarmReceiver
+import lap.shynome.com.MainActivity
+import lap.shynome.com.receiver.AlarmReceiver
 
 /**
  * 自建引擎的闹钟调度。

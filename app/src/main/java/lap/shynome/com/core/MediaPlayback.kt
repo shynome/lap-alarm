@@ -1,11 +1,11 @@
-package looply.shynome.com.core
+package lap.shynome.com.core
 
 import android.content.Context
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.graphics.drawable.toBitmap
-import looply.shynome.com.R
+import lap.shynome.com.R
 
 /**
  * 把「启动倒计时」伪装成一个媒体会话，让系统在锁屏上渲染媒体控制卡。
@@ -22,39 +22,39 @@ object MediaPlayback {
     fun ensure(context: Context): MediaSessionCompat {
         session?.let { return it }
         val app = context.applicationContext
-        val s = MediaSessionCompat(app, "Looply").apply {
+        val s = MediaSessionCompat(app, "Lap").apply {
             setCallback(object : MediaSessionCompat.Callback() {
 
                 /** 快进键：空闲→开新一轮，暂停中→继续，响铃中→关闭铃声。 */
                 override fun onPlay() {
                     val state = Store.state.value
                     when {
-                        state.ringing -> Looply.stopTimer(app)
-                        state.paused -> Looply.resumeTimer(app)
-                        else -> Looply.startTimer(app)
+                        state.ringing -> Lap.stopTimer(app)
+                        state.paused -> Lap.resumeTimer(app)
+                        else -> Lap.startTimer(app)
                     }
                 }
 
                 /** 暂停。自建引擎是真暂停，系统时钟引擎只是切换显示。 */
                 override fun onPause() {
-                    Looply.pauseTimer(app)
+                    Lap.pauseTimer(app)
                 }
 
                 /** 拖动进度条：把计时跳到对应位置。 */
                 override fun onSeekTo(pos: Long) {
-                    Looply.seekTo(app, pos)
+                    Lap.seekTo(app, pos)
                 }
 
                 override fun onStop() {
-                    Looply.stopTimer(app)
+                    Lap.stopTimer(app)
                 }
 
                 override fun onSkipToNext() {
-                    Looply.shiftPreset(app, 1)
+                    Lap.shiftPreset(app, 1)
                 }
 
                 override fun onSkipToPrevious() {
-                    Looply.shiftPreset(app, -1)
+                    Lap.shiftPreset(app, -1)
                 }
             })
             isActive = true

@@ -1,4 +1,4 @@
-package looply.shynome.com.core
+package lap.shynome.com.core
 
 import android.annotation.SuppressLint
 import android.app.ActivityOptions
@@ -14,10 +14,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media.app.NotificationCompat.MediaStyle
-import looply.shynome.com.MainActivity
-import looply.shynome.com.R
-import looply.shynome.com.receiver.ControlReceiver
-import looply.shynome.com.receiver.MediaButtonRelay
+import lap.shynome.com.MainActivity
+import lap.shynome.com.R
+import lap.shynome.com.receiver.ControlReceiver
+import lap.shynome.com.receiver.MediaButtonRelay
 import android.view.KeyEvent
 
 /**
@@ -28,7 +28,7 @@ import android.view.KeyEvent
  * - 已暂停 / 未开始 → 「播放」：点了由中转页启动一轮新的倒计时
  */
 object Notifications {
-    const val CHANNEL_STATUS = "looply_status"
+    const val CHANNEL_STATUS = "lap_status"
     const val ID_STATUS = 100
 
     private fun piFlags(): Int =

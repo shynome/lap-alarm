@@ -1,8 +1,8 @@
-# Looply 设计文档
+# Lap 设计文档
 
 循环倒计时。一键把「接下来 N 分钟」变成一轮倒计时，锁屏与通知栏都能控制。
 
-- 包名 / applicationId：`looply.shynome.com`
+- 包名 / applicationId：`lap.shynome.com`
 - 语言：Kotlin + Jetpack Compose（Material 3）
 - minSdk 26 ｜ targetSdk 34 ｜ compileSdk 35
 - 目标机型：小米 HyperOS（实测 24115RA8EC / Android 16）
@@ -35,7 +35,7 @@
 MIUI 也不会随意丢弃。实测登记结果：
 
 ```
-RTC_WAKEUP tag=*walarm*:looply.action.ALARM_FIRE window=0
+RTC_WAKEUP tag=*walarm*:lap.action.ALARM_FIRE window=0
 exactAllowReason=policy_permission
 Alarm clock: triggerTime=...
 idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, ...}]
@@ -49,7 +49,7 @@ idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, ...}]
 ```
 D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
   Intent { act=android.intent.action.SET_TIMER ... cmp=com.android.deskclock/.HandleSetAlarmActivity }
-  pkg : looply.shynome.com  uid : 10317  tuid : 10136     // 10136 = com.miui.home
+  pkg : lap.shynome.com  uid : 10317  tuid : 10136     // 10136 = com.miui.home
 ```
 
 排查过程：
@@ -76,7 +76,7 @@ D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
 
 | 状态 | 标题 | 中间键 |
 |---|---|---|
-| 空闲 | `Looply · N 分钟` | ▶ 开始 |
+| 空闲 | `Lap · N 分钟` | ▶ 开始 |
 | 计时中 | 同上 | ⏸ 暂停 |
 | 暂停 | 同上 | ▶ 继续 |
 | 响铃 | `⏰ 时间到 · N 分钟` | ⏹ 关闭 |
@@ -93,7 +93,7 @@ D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
 .setState(state, elapsedMs, if (playing) 1f else 0f)
 ```
 
-拖动回调 `onSeekTo(elapsedMs)` → `Looply.seekTo()`：取消旧闹钟、按新剩余时间重设。
+拖动回调 `onSeekTo(elapsedMs)` → `Lap.seekTo()`：取消旧闹钟、按新剩余时间重设。
 暂停中拖动只挪动冻结点，不会自己跑起来。
 
 ### 3.2 会话保活
@@ -106,8 +106,8 @@ D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
 ## 4. 组件
 
 ```
-looply.shynome.com
-├── LooplyApp               Application：初始化 Store 与通知渠道
+lap.shynome.com
+├── LapApp               Application：初始化 Store 与通知渠道
 ├── MainActivity            Compose 主界面：档位选择 + 计时控制 + 权限引导
 ├── core/
 │   ├── Store.kt            状态与持久化
@@ -116,7 +116,7 @@ looply.shynome.com
 │   ├── MediaPlayback.kt    MediaSession：锁屏卡片三键 ↔ 业务动作
 │   ├── Notifications.kt    常驻通知（MediaStyle）
 │   ├── Format.kt           剩余时间格式化
-│   └── Looply.kt           业务门面
+│   └── Lap.kt           业务门面
 ├── receiver/
 │   ├── AlarmReceiver.kt    到点入口
 │   ├── ControlReceiver.kt  通知/广播控制的按钮
@@ -172,7 +172,7 @@ looply.shynome.com
 后台冻结状态下，广播会被缓存而非投递（用 adb 调试时尤其明显）：
 
 ```
-W BroadcastQueue: Greezer Denial: sending Intent { act=looply.action.START ... }
+W BroadcastQueue: Greezer Denial: sending Intent { act=lap.action.START ... }
   due to receiver ProcessRecord{...} need cached broadcast
 ```
 
@@ -181,7 +181,7 @@ W BroadcastQueue: Greezer Denial: sending Intent { act=looply.action.START ... }
 ### 6.2 建议的系统设置
 
 - 允许「自启动」，省电策略设为「无限制」
-- 关闭对 Looply 通知的「隐藏通知内容」，否则锁屏看不到卡片
+- 关闭对 Lap 通知的「隐藏通知内容」，否则锁屏看不到卡片
 
 ---
 

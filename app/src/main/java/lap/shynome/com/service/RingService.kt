@@ -1,4 +1,4 @@
-package looply.shynome.com.service
+package lap.shynome.com.service
 
 import android.app.Service
 import android.content.Context
@@ -14,8 +14,8 @@ import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import looply.shynome.com.core.Looply
-import looply.shynome.com.core.Notifications
+import lap.shynome.com.core.Lap
+import lap.shynome.com.core.Notifications
 
 /**
  * 自建引擎的响铃服务。
@@ -35,7 +35,7 @@ class RingService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Looply.init(this)
+        Lap.init(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -56,7 +56,7 @@ class RingService : Service() {
         releaseWakeLock()
         // DETACH：把通知从服务上摘下来但保留，随后 onRingStopped 会把它刷成普通形态
         stopForeground(STOP_FOREGROUND_DETACH)
-        Looply.onRingStopped(this)
+        Lap.onRingStopped(this)
         super.onDestroy()
     }
 
@@ -119,7 +119,7 @@ class RingService : Service() {
             PowerManager.SCREEN_BRIGHT_WAKE_LOCK or
                 PowerManager.ACQUIRE_CAUSES_WAKEUP or
                 PowerManager.ON_AFTER_RELEASE,
-            "looply:ring",
+            "lap:ring",
         )
         runCatching { lock.acquire(MAX_RING_MS) }
         wakeLock = lock

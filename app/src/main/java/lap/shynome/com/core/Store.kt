@@ -1,4 +1,4 @@
-package looply.shynome.com.core
+package lap.shynome.com.core
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -53,7 +53,7 @@ data class AppState(
 }
 
 object Store {
-    private const val FILE = "looply_state"
+    private const val FILE = "lap_state"
     private const val KEY_INTERVAL = "interval"
     private const val KEY_PRESETS = "presets"
     private const val KEY_TIMER_STARTED = "timer_started_at"

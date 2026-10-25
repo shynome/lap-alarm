@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  启动图标前景：一圈跑道。
+  浅色轨道 + 白色 270° 进度弧 + 起跑点，呼应 Lap「再跑一圈」。
+  圆心(54,54) 半径 31、描边 9，外径 71，几乎填满 72 安全区。
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <group
-        android:scaleX="2.4"
-        android:scaleY="2.4"
-        android:translateX="25.2"
-        android:translateY="25.2">
-        <path
-            android:fillColor="#FFFFFFFF"
-            android:pathData="M12,4V1L8,5l4,4V6c3.31,0 6,2.69 6,6 0,1.01 -0.25,1.97 -0.7,2.8l1.46,1.46C19.54,15.03 20,13.57 20,12c0,-4.42 -3.58,-8 -8,-8zM12,18c-3.31,0 -6,-2.69 -6,-6 0,-1.01 0.25,-1.97 0.7,-2.8L5.24,7.74C4.46,8.97 4,10.43 4,12c0,4.42 3.58,8 8,8v3l4,-4 -4,-4v3z" />
-    </group>
+
+    <!-- 轨道：完整圆环，低透明度 -->
+    <path
+        android:pathData="M54,23 a31,31 0 1,0 0,62 a31,31 0 1,0 0,-62"
+        android:strokeColor="#59FFFFFF"
+        android:strokeWidth="9"
+        android:strokeLineCap="round" />
+
+    <!-- 进度：从顶点顺时针 270°，留出右下角的缺口 -->
+    <path
+        android:pathData="M54,23 a31,31 0 1,1 -31,31"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="9"
+        android:strokeLineCap="round" />
+
+    <!-- 起跑点 -->
+    <path
+        android:pathData="M54,23 m-12,0 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0"
+        android:fillColor="#FFFFFFFF" />
 </vector>

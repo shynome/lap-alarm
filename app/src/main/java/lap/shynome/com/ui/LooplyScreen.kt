@@ -47,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -163,12 +165,33 @@ private fun BrandHeader() {
                 .background(colors.primaryContainer),
             contentAlignment = Alignment.Center,
         ) {
-            Text(
-                text = "∞",
-                color = colors.onPrimaryContainer,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-            )
+            // 与启动图标一致的「一圈跑道」：轨道 + 270° 进度弧 + 起跑点
+            Canvas(Modifier.size(24.dp)) {
+                val stroke = 2.6.dp.toPx()
+                val radius = (size.minDimension - stroke) / 2f
+                val center = Offset(size.width / 2f, size.height / 2f)
+
+                drawCircle(
+                    color = colors.onPrimaryContainer.copy(alpha = 0.22f),
+                    radius = radius,
+                    center = center,
+                    style = Stroke(width = stroke),
+                )
+                drawArc(
+                    color = colors.onPrimaryContainer,
+                    startAngle = -90f,
+                    sweepAngle = 270f,
+                    useCenter = false,
+                    topLeft = Offset(center.x - radius, center.y - radius),
+                    size = Size(radius * 2, radius * 2),
+                    style = Stroke(width = stroke, cap = StrokeCap.Round),
+                )
+                drawCircle(
+                    color = colors.onPrimaryContainer,
+                    radius = stroke * 0.95f,
+                    center = Offset(center.x, center.y - radius),
+                )
+            }
         }
         Spacer(Modifier.width(12.dp))
         Column {

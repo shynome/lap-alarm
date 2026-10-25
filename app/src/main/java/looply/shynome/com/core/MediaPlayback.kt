@@ -82,14 +82,12 @@ object MediaPlayback {
         // 用户点媒体卡上的 ✕ 后，系统会把会话置为非活跃并可能移除卡片。
         // 每次刷新都重新激活，保证卡片始终作为锁屏/通知栏的常驻入口存在。
         if (!s.isActive) runCatching { s.isActive = true }
-        val builtin = state.engine == Engine.BUILTIN
         // 标题固定为档位，不随剩余时间变化
         val title = context.getString(R.string.minutes_value, state.intervalMinutes)
         val subtitle = context.getString(
             when {
                 state.ringing -> R.string.media_subtitle_ringing
-                state.isPlaying() && builtin -> R.string.media_subtitle_builtin_running
-                state.isPlaying() -> R.string.media_subtitle_running
+                state.isPlaying() -> R.string.media_subtitle_builtin_running
                 state.isTimerRunning() -> R.string.notif_subtitle_builtin_paused
                 else -> R.string.media_subtitle
             },

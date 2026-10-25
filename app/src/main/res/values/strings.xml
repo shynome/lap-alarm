@@ -3,27 +3,21 @@
     <string name="app_name">Looply</string>
 
     <string name="channel_status">倒计时入口</string>
-    <string name="channel_status_desc">常驻通知，一键启动或关闭系统倒计时</string>
+    <string name="channel_status_desc">常驻通知，一键启动或暂停倒计时</string>
 
     <string name="notif_title">Looply · %1$d 分钟</string>
     <string name="notif_subtitle">点击播放开始倒计时</string>
-    <string name="notif_title_running">Looply · 剩余 %1$s</string>
-    <string name="notif_subtitle_running">倒计时进行中</string>
     <string name="notif_subtitle_paused">点播放重新开始</string>
     <string name="media_subtitle">点击播放开始倒计时</string>
-    <string name="media_subtitle_running">系统倒计时进行中</string>
     <string name="notif_title_ringing">⏰ 时间到 · %1$d 分钟</string>
     <string name="notif_subtitle_ringing">点「关闭」结束这一轮</string>
     <string name="media_subtitle_ringing">时间到</string>
     <string name="media_subtitle_builtin_running">倒计时进行中</string>
     <string name="notif_subtitle_builtin_paused">已暂停</string>
     <string name="action_stop_ring">关闭</string>
-    <string name="cd_stop">关闭</string>
     <string name="minutes_value">%1$d 分钟</string>
     <string name="action_start_timer">开始 %1$d 分钟</string>
     <string name="action_pause">暂停</string>
-    <string name="action_close_timer">关闭倒计时</string>
-    <string name="action_open_timers">关闭倒计时</string>
     <string name="cd_prev">上一个档位</string>
     <string name="cd_next">下一个档位</string>
 </resources>

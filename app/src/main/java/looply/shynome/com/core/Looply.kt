@@ -1,14 +1,13 @@
 package looply.shynome.com.core
 
 import android.content.Context
-import looply.shynome.com.R
 import looply.shynome.com.service.RingService
 
 /**
- * 业务门面：档位维护 + 计时引擎调度。
+ * 业务门面：档位维护与计时控制。
  *
- * 两个引擎的差异只体现在 [startTimer] / [pauseTimer] / [resumeTimer] / [stopTimer] 内部，
- * 其余（档位、通知、媒体卡）完全共用。
+ * 计时由本应用自己负责：[AlarmScheduler] 登记系统级闹钟，到点后 [RingService] 响铃。
+ * 全程不涉及跨应用跳转，因此在 MIUI 等限制后台拉起其他应用的 ROM 上也能正常工作。
  */
 object Looply {
 
@@ -19,23 +18,17 @@ object Looply {
 
     // ---------------------------------------------------------------- 计时控制
 
+    /** 开始新一轮。返回 false 表示闹钟没能登记成功（通常是缺精确闹钟权限）。 */
     fun startTimer(context: Context, minutes: Int? = null): Boolean {
         Store.init(context)
         val interval = (minutes ?: Store.state.value.intervalMinutes)
             .coerceIn(AppState.MIN_MINUTES, AppState.MAX_MINUTES)
-        return when (Store.state.value.engine) {
-            Engine.BUILTIN -> startBuiltin(context, interval)
-            Engine.SYSTEM_CLOCK -> startSystemClock(context, interval)
-        }
-    }
-
-    private fun startBuiltin(context: Context, minutes: Int): Boolean {
         val now = System.currentTimeMillis()
-        if (!AlarmScheduler.schedule(context, now + minutes * 60_000L)) return false
+        if (!AlarmScheduler.schedule(context, now + interval * 60_000L)) return false
         Store.update {
             it.copy(
-                intervalMinutes = minutes,
-                runningMinutes = minutes,
+                intervalMinutes = interval,
+                runningMinutes = interval,
                 timerStartedAt = now,
                 paused = false,
                 pausedRemainingMs = 0L,
@@ -46,41 +39,14 @@ object Looply {
         return true
     }
 
-    private fun startSystemClock(context: Context, minutes: Int): Boolean {
-        val ok = TimerLauncher.launch(context, minutes, context.getString(R.string.app_name))
-        if (ok) {
-            Store.update {
-                it.copy(
-                    intervalMinutes = minutes,
-                    runningMinutes = minutes,
-                    timerStartedAt = System.currentTimeMillis(),
-                    paused = false,
-                    pausedRemainingMs = 0L,
-                    ringing = false,
-                )
-            }
-            refresh(context)
-        }
-        return ok
-    }
-
-    /**
-     * 暂停。
-     *
-     * 自建引擎是**真暂停**：取消系统闹钟并把剩余时间冻结下来。
-     * 系统时钟引擎做不到（无法取消系统计时器），只能切换媒体卡的显示状态。
-     */
+    /** 暂停：取消系统闹钟并把剩余时间冻结下来。 */
     fun pauseTimer(context: Context) {
         Store.init(context)
         val state = Store.state.value
         if (!state.isTimerRunning() || state.paused) return
-        if (state.engine == Engine.BUILTIN) {
-            val remaining = state.remainingMs()
-            AlarmScheduler.cancel(context)
-            Store.update { it.copy(paused = true, pausedRemainingMs = remaining) }
-        } else {
-            Store.update { it.copy(paused = true) }
-        }
+        val remaining = state.remainingMs()
+        AlarmScheduler.cancel(context)
+        Store.update { it.copy(paused = true, pausedRemainingMs = remaining) }
         refresh(context)
     }
 
@@ -88,17 +54,13 @@ object Looply {
         Store.init(context)
         val state = Store.state.value
         if (!state.paused) return
-        if (state.engine == Engine.BUILTIN) {
-            val remaining = state.pausedRemainingMs.coerceAtLeast(1_000L)
-            val now = System.currentTimeMillis()
-            if (!AlarmScheduler.schedule(context, now + remaining)) return
-            // 反推起点，使 endsAt() 正好等于 now + remaining
-            val startedAt = now + remaining - state.runningMinutes * 60_000L
-            Store.update {
-                it.copy(timerStartedAt = startedAt, paused = false, pausedRemainingMs = 0L)
-            }
-        } else {
-            Store.update { it.copy(paused = false) }
+        val remaining = state.pausedRemainingMs.coerceAtLeast(1_000L)
+        val now = System.currentTimeMillis()
+        if (!AlarmScheduler.schedule(context, now + remaining)) return
+        // 反推起点，使 endsAt() 正好等于 now + remaining
+        val startedAt = now + remaining - state.runningMinutes * 60_000L
+        Store.update {
+            it.copy(timerStartedAt = startedAt, paused = false, pausedRemainingMs = 0L)
         }
         refresh(context)
     }
@@ -123,8 +85,6 @@ object Looply {
         Store.init(context)
         val state = Store.state.value
         if (!state.isTimerRunning() || state.runningMinutes <= 0) return
-        // 系统时钟引擎无法改变系统计时器的剩余时间，拖动不生效
-        if (state.engine != Engine.BUILTIN) return
 
         val total = state.runningMinutes * 60_000L
         val remaining = (total - elapsedMs).coerceIn(1_000L, total)
@@ -168,8 +128,6 @@ object Looply {
 
     // ---------------------------------------------------------------- 档位
 
-    fun openTimers(context: Context): Boolean = TimerLauncher.openTimers(context)
-
     fun shiftPreset(context: Context, delta: Int) {
         Store.init(context)
         val current = Store.state.value
@@ -202,25 +160,6 @@ object Looply {
             else it.copy(
                 presets = presets,
                 intervalMinutes = if (it.intervalMinutes == minutes) presets.first() else it.intervalMinutes,
-            )
-        }
-        refresh(context)
-    }
-
-    fun setEngine(context: Context, engine: Engine) {
-        Store.init(context)
-        if (Store.state.value.engine == engine) return
-        // 切引擎时先把上一轮收尾，避免两套同时计时
-        AlarmScheduler.cancel(context)
-        RingService.stop(context)
-        Store.update {
-            it.copy(
-                engine = engine,
-                timerStartedAt = 0L,
-                runningMinutes = 0,
-                paused = false,
-                pausedRemainingMs = 0L,
-                ringing = false,
             )
         }
         refresh(context)

@@ -14,7 +14,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media.app.NotificationCompat.MediaStyle
-import looply.shynome.com.LaunchTimerActivity
 import looply.shynome.com.MainActivity
 import looply.shynome.com.R
 import looply.shynome.com.receiver.ControlReceiver
@@ -77,7 +76,6 @@ object Notifications {
         val state = Store.state.value
         val ringing = state.ringing
         val playing = state.isPlaying()
-        val builtin = state.engine == Engine.BUILTIN
 
         val contentIntent = PendingIntent.getActivity(
             context,
@@ -101,8 +99,7 @@ object Notifications {
                 context.getString(
                     when {
                         ringing -> R.string.notif_subtitle_ringing
-                        playing && builtin -> R.string.media_subtitle_builtin_running
-                        playing -> R.string.notif_subtitle_running
+                        playing -> R.string.media_subtitle_builtin_running
                         state.paused -> R.string.notif_subtitle_builtin_paused
                         state.isTimerRunning() -> R.string.notif_subtitle_paused
                         else -> R.string.notif_subtitle

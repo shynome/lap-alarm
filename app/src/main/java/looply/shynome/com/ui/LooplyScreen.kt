@@ -64,14 +64,11 @@ import looply.shynome.com.core.formatRemaining
 @Composable
 fun LooplyScreen(
     state: AppState,
-    timerAvailable: Boolean,
-    overlayGranted: Boolean,
     notifGranted: Boolean,
     onStart: () -> Unit,
     onPause: () -> Unit,
     onResume: () -> Unit,
     onStop: () -> Unit,
-    onRequestOverlay: () -> Unit,
     onRequestNotifications: () -> Unit,
     onSelectPreset: (Int) -> Unit,
     onAddPreset: (Int) -> Unit,
@@ -94,7 +91,7 @@ fun LooplyScreen(
             Spacer(Modifier.height(20.dp))
             PrimaryButton(
                 state = state,
-                enabled = timerAvailable,
+                enabled = true,
                 onStart = onStart,
                 onPause = onPause,
                 onResume = onResume,
@@ -131,15 +128,6 @@ fun LooplyScreen(
                         "只有响铃时才会短暂出现。",
                     action = "去开启",
                     onAction = onRequestNotifications,
-                )
-                Spacer(Modifier.height(12.dp))
-            }
-            if (timerAvailable && !overlayGranted) {
-                NoteCard(
-                    title = "还需要一个权限",
-                    body = "允许「显示在其他应用上层」后，应用退到后台时也能从锁屏 / 通知栏一键启动倒计时。",
-                    action = "去开启",
-                    onAction = onRequestOverlay,
                 )
                 Spacer(Modifier.height(12.dp))
             }

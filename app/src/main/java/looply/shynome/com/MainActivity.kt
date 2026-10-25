@@ -19,17 +19,13 @@ import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import looply.shynome.com.core.AlarmScheduler
-import looply.shynome.com.core.Engine
 import looply.shynome.com.core.Looply
 import looply.shynome.com.core.Store
-import looply.shynome.com.core.TimerLauncher
 import looply.shynome.com.ui.LooplyScreen
 import looply.shynome.com.ui.theme.LooplyTheme
 
 class MainActivity : ComponentActivity() {
 
-    private var timerAvailable by mutableStateOf(true)
-    private var overlayGranted by mutableStateOf(true)
     private var exactAlarmGranted by mutableStateOf(true)
     private var notifGranted by mutableStateOf(true)
     private var askedNotif = false
@@ -51,7 +47,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Looply.init(this)
         enableEdgeToEdge()
-
         notifGranted = notificationsEnabled()
 
         setContent {
@@ -59,14 +54,11 @@ class MainActivity : ComponentActivity() {
                 val state by Store.state.collectAsState()
                 LooplyScreen(
                     state = state,
-                    timerAvailable = timerAvailable,
-                    overlayGranted = overlayGranted,
                     notifGranted = notifGranted,
                     onStart = { startTimer() },
                     onPause = { Looply.pauseTimer(this) },
                     onResume = { Looply.resumeTimer(this) },
-                    onStop = { closeOrOpenTimers() },
-                    onRequestOverlay = { openOverlaySettings() },
+                    onStop = { Looply.stopTimer(this) },
                     onRequestNotifications = { openNotificationSettings() },
                     onSelectPreset = { Looply.setInterval(this, it) },
                     onAddPreset = { Looply.addPreset(this, it) },
@@ -81,10 +73,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        // 自建引擎不依赖系统时钟，也不依赖悬浮窗权限
-        val builtin = Store.state.value.engine == Engine.BUILTIN
-        timerAvailable = builtin || TimerLauncher.isAvailable(this)
-        overlayGranted = builtin || Settings.canDrawOverlays(this)
         exactAlarmGranted = AlarmScheduler.canScheduleExact(this)
         notifGranted = notificationsEnabled()
         Looply.refresh(this)
@@ -108,23 +96,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** 「关闭正在进行的倒计时」：自建引擎直接结束本轮，系统时钟引擎只能跳到时钟页面。 */
-    private fun closeOrOpenTimers() {
-        if (Store.state.value.engine == Engine.BUILTIN) {
-            Looply.stopTimer(this)
-        } else if (!Looply.openTimers(this)) {
-            Toast.makeText(this, "无法打开系统时钟", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun openOverlaySettings() {
-        runCatching {
-            startActivity(
-                Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")),
-            )
-        }
-    }
-
     private fun openExactAlarmSettings() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
         runCatching {
@@ -141,7 +112,7 @@ class MainActivity : ComponentActivity() {
      * 只在真正要开始计时时确保通知权限。
      *
      * 没有通知就没有媒体控件，所以这一步不能省；但也不该在开屏时就弹，
-     * 用户还没表达意图之前弹窗会被直接拒掉。
+     * 用户还没表达意图之前弹窗容易被直接拒掉。
      *
      * @return true 表示权限就绪，可以继续启动
      */
@@ -171,18 +142,10 @@ class MainActivity : ComponentActivity() {
 
     private fun startTimerInternal() {
         notifGranted = notificationsEnabled()
-        when (Store.state.value.engine) {
-            Engine.BUILTIN -> if (!exactAlarmGranted) {
-                Toast.makeText(this, "需要「闹钟和提醒」权限才能精确计时", Toast.LENGTH_LONG).show()
-                openExactAlarmSettings()
-                return
-            }
-
-            Engine.SYSTEM_CLOCK -> if (!TimerLauncher.isAvailable(this)) {
-                timerAvailable = false
-                Toast.makeText(this, "系统里没有可用的时钟应用", Toast.LENGTH_LONG).show()
-                return
-            }
+        if (!exactAlarmGranted) {
+            Toast.makeText(this, "需要「闹钟和提醒」权限才能精确计时", Toast.LENGTH_LONG).show()
+            openExactAlarmSettings()
+            return
         }
         if (!Looply.startTimer(this)) {
             Toast.makeText(this, "无法启动倒计时", Toast.LENGTH_LONG).show()

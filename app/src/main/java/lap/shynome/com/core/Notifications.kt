@@ -76,6 +76,8 @@ object Notifications {
         val state = Store.state.value
         val ringing = state.ringing
         val playing = state.isPlaying()
+        // 被切档位搁置的旧一轮不展示成「已暂停」，卡片应该回到新档位的待启动形态
+        val paused = state.isTimerRunning() && state.paused
 
         val contentIntent = PendingIntent.getActivity(
             context,
@@ -100,7 +102,7 @@ object Notifications {
                     when {
                         ringing -> R.string.notif_subtitle_ringing
                         playing -> R.string.media_subtitle_builtin_running
-                        state.paused -> R.string.notif_subtitle_builtin_paused
+                        paused -> R.string.notif_subtitle_builtin_paused
                         state.isTimerRunning() -> R.string.notif_subtitle_paused
                         else -> R.string.notif_subtitle
                     },

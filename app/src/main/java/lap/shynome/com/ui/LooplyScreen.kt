@@ -218,8 +218,9 @@ private fun DialCard(state: AppState) {
 
     val ringing = state.ringing
     val active = state.isTimerRunning(now)
+    // 档位已经换到别处时，圆环要按新档位的完整时长画，而不是残留的旧一轮时长
     val totalMs =
-        (if (state.runningMinutes > 0) state.runningMinutes else state.intervalMinutes) * 60_000L
+        (if (active || ringing) state.runningMinutes else state.intervalMinutes) * 60_000L
     val remaining = if (active) state.remainingMs(now) else totalMs
     val fraction = if (active && totalMs > 0L) {
         (remaining.toFloat() / totalMs).coerceIn(0f, 1f)

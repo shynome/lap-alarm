@@ -42,18 +42,33 @@ object Lap {
     /** 暂停：取消系统闹钟并把剩余时间冻结下来。 */
     fun pauseTimer(context: Context) {
         Store.init(context)
+        if (!pauseIfPlaying(context)) return
+        refresh(context)
+    }
+
+    /**
+     * 如果正在跑，就取消闹钟并把剩余时间冻住；已经暂停或没在跑则什么都不做。
+     *
+     * @return 是否真的发生了暂停
+     */
+    private fun pauseIfPlaying(context: Context): Boolean {
         val state = Store.state.value
-        if (!state.isTimerRunning() || state.paused) return
+        if (!state.isTimerRunning() || state.paused) return false
         val remaining = state.remainingMs()
         AlarmScheduler.cancel(context)
         Store.update { it.copy(paused = true, pausedRemainingMs = remaining) }
-        refresh(context)
+        return true
     }
 
     fun resumeTimer(context: Context) {
         Store.init(context)
         val state = Store.state.value
         if (!state.paused) return
+        // 被搁置的旧一轮不应该继续跑：此时播放键的语义是「用当前档位开新一轮」
+        if (!state.sessionMatchesInterval()) {
+            startTimer(context)
+            return
+        }
         val remaining = state.pausedRemainingMs.coerceAtLeast(1_000L)
         val now = System.currentTimeMillis()
         if (!AlarmScheduler.schedule(context, now + remaining)) return
@@ -68,12 +83,17 @@ object Lap {
     /** 彻底结束这一轮：取消闹钟、停掉响铃、清空状态。 */
     fun stopTimer(context: Context) {
         Store.init(context)
+        clearSession(context)
+        refresh(context)
+    }
+
+    /** 静默结束当前这一轮（不刷新通知，由调用方合并成一次刷新）。 */
+    private fun clearSession(context: Context) {
         AlarmScheduler.cancel(context)
-        RingService.stop(context)
+        if (Store.state.value.ringing) RingService.stop(context)
         Store.update {
             it.copy(paused = false, pausedRemainingMs = 0L, ringing = false, runningMinutes = 0)
         }
-        refresh(context)
     }
 
     /**
@@ -138,9 +158,26 @@ object Lap {
         setInterval(context, presets[((index + delta) % size + size) % size])
     }
 
+    /**
+     * 切换档位。
+     *
+     * - 计时中 / 响铃中：旧一轮直接作废，新档位立即从头开始跑（所以时长立刻对新档位生效）。
+     * - 暂停中：只换档位，暂停的那一轮冻着；切回同一档位可以接着走剩余时间。
+     * - 空闲：只换档位。
+     */
     fun setInterval(context: Context, minutes: Int) {
         Store.init(context)
         val clamped = minutes.coerceIn(AppState.MIN_MINUTES, AppState.MAX_MINUTES)
+        val state = Store.state.value
+        if (clamped == state.intervalMinutes) return
+
+        if (state.isActive() && !state.paused) {
+            if (state.ringing) RingService.stop(context)
+            // setAlarmClock 用的是同一个 PendingIntent，直接重登记就等于替换旧闹钟
+            if (startTimer(context, clamped)) return
+            // 登记失败：至少要把旧的一轮清掉，不能留下一个跑着的旧计时
+            clearSession(context)
+        }
         Store.update { it.copy(intervalMinutes = clamped) }
         refresh(context)
     }
@@ -154,6 +191,9 @@ object Lap {
 
     fun removePreset(context: Context, minutes: Int) {
         Store.init(context)
+        val state = Store.state.value
+        // 删掉正在跑的档位会让这一轮失去归属，直接结束它
+        if (state.intervalMinutes == minutes && state.isPlaying()) clearSession(context)
         Store.update {
             val presets = it.presets - minutes
             if (presets.isEmpty()) it

@@ -96,7 +96,23 @@ D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
 拖动回调 `onSeekTo(elapsedMs)` → `Lap.seekTo()`：取消旧闹钟、按新剩余时间重设。
 暂停中拖动只挪动冻结点，不会自己跑起来。
 
-### 3.2 会话保活
+### 3.2 切档位：暂停的延续暂停，其余从头开始
+
+左右两键（以及 app 内的档位按钮）切换档位时不再主动暂停，按当前状态分三种：
+
+| 切换前 | 切换后 |
+|---|---|
+| 计时中 | 旧一轮作废，新档位立即从完整时长开跑 |
+| 响铃中 | 先停铃，旧一轮作废，新档位立即开跑 |
+| 暂停中 | 只换档位，剩余时间冻住；切回同一档位时 ▶ 接着走 |
+| 空闲 | 只换档位 |
+
+被冻住的一轮用 `runningMinutes` 记住自己的档位，只有 `runningMinutes == intervalMinutes` 时才算「当前这一轮」：
+
+`AppState.sessionMatchesInterval()` 是这条规则的唯一判据，`isTimerRunning()` / `isPlaying()`
+都带上了它，因此 UI、通知、媒体卡的判断天然一致。
+
+### 3.3 会话保活
 
 用户点 ✕ 后系统会把会话置为非活跃并可能移除卡片。
 因此每次刷新都重新 `isActive = true`，保证卡片始终作为常驻入口存在。

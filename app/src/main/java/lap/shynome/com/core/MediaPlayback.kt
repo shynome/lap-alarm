@@ -25,12 +25,17 @@ object MediaPlayback {
         val s = MediaSessionCompat(app, "Lap").apply {
             setCallback(object : MediaSessionCompat.Callback() {
 
-                /** 快进键：空闲→开新一轮，暂停中→继续，响铃中→关闭铃声。 */
+                /**
+                 * 快进键：空闲→开新一轮，暂停中→继续，响铃中→关闭铃声。
+                 *
+                 * 只有暂停的这一轮仍属于当前档位才能继续；被切档位搁置的旧一轮不带剩余时间回来，
+                 * 直接按当前档位的完整时长重新开一轮。
+                 */
                 override fun onPlay() {
                     val state = Store.state.value
                     when {
                         state.ringing -> Lap.stopTimer(app)
-                        state.paused -> Lap.resumeTimer(app)
+                        state.paused && state.isTimerRunning() -> Lap.resumeTimer(app)
                         else -> Lap.startTimer(app)
                     }
                 }
@@ -95,7 +100,13 @@ object MediaPlayback {
 
         // 进度条：总长 = 本轮时长，当前点 = 已过去的时长。
         // 给真实 position + speed=1 后，系统会自己推进进度条，不需要每秒刷新通知。
-        val totalMs = (if (state.runningMinutes > 0) state.runningMinutes else state.intervalMinutes) * 60_000L
+        // 切到别的档位后旧一轮被搁置，卡片这时按新档位显示成「整段未开始」。
+        val sessionMinutes = when {
+            state.ringing -> state.runningMinutes.takeIf { it > 0 } ?: state.intervalMinutes
+            state.isTimerRunning() -> state.runningMinutes
+            else -> state.intervalMinutes
+        }
+        val totalMs = sessionMinutes * 60_000L
         val elapsedMs = if (state.isActive()) {
             (totalMs - state.remainingMs()).coerceIn(0L, totalMs)
         } else {

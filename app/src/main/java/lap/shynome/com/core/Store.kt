@@ -29,9 +29,17 @@ data class AppState(
         if (timerStartedAt <= 0L || runningMinutes <= 0) 0L
         else timerStartedAt + runningMinutes * 60_000L
 
-    /** 是否存在进行中的一轮（含暂停与响铃）。 */
+    /**
+     * 这一轮是否仍属于当前选中的档位。
+     *
+     * 切档位时旧一轮会被暂停并「搁置」：它既不展示也不响应按键，
+     * 但剩余时间仍然留着——切回同一档位时可以接着走，切到别的档位则被新一轮覆盖。
+     */
+    fun sessionMatchesInterval(): Boolean = runningMinutes > 0 && runningMinutes == intervalMinutes
+
+    /** 是否存在进行中的一轮（含暂停与响铃），且它属于当前档位。 */
     fun isTimerRunning(now: Long = System.currentTimeMillis()): Boolean =
-        timerStartedAt > 0L && (paused || now < endsAt())
+        sessionMatchesInterval() && timerStartedAt > 0L && (paused || now < endsAt())
 
     /** 媒体卡是否显示「计时中」。 */
     fun isPlaying(now: Long = System.currentTimeMillis()): Boolean =

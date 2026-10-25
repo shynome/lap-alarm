@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
@@ -109,7 +110,7 @@ fun LapScreen(
                         .height(50.dp),
                 ) {
                     Text(
-                        "重新开始 ${state.intervalMinutes} 分钟",
+                        stringResource(R.string.action_restart, state.intervalMinutes),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium,
                     )
@@ -125,10 +126,9 @@ fun LapScreen(
             Spacer(Modifier.height(16.dp))
             if (!notifGranted) {
                 NoteCard(
-                    title = "还需要通知权限",
-                    body = "通知栏和锁屏的媒体卡片靠通知权限显示。没有它，计时中看不到控件，" +
-                        "只有响铃时才会短暂出现。",
-                    action = "去开启",
+                    title = stringResource(R.string.notif_perm_title),
+                    body = stringResource(R.string.notif_perm_body),
+                    action = stringResource(R.string.action_grant),
                     onAction = onRequestNotifications,
                 )
                 Spacer(Modifier.height(12.dp))
@@ -201,7 +201,7 @@ private fun BrandHeader() {
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = "专注一圈",
+                text = stringResource(R.string.tagline),
                 style = MaterialTheme.typography.bodySmall,
                 color = colors.onSurfaceVariant,
             )
@@ -280,14 +280,14 @@ private fun DialCard(state: AppState) {
                     when {
                         ringing -> {
                             Text(
-                                text = "时间到",
+                                text = stringResource(R.string.dial_ringing),
                                 fontSize = 42.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = colors.error,
                             )
                             Spacer(Modifier.height(8.dp))
                             Text(
-                                text = "点下方按钮关闭",
+                                text = stringResource(R.string.dial_ringing_hint),
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = colors.error,
@@ -307,7 +307,7 @@ private fun DialCard(state: AppState) {
                             )
                             Spacer(Modifier.height(8.dp))
                             Text(
-                                text = if (state.paused) "已暂停" else "进行中",
+                                text = if (state.paused) stringResource(R.string.dial_paused) else stringResource(R.string.dial_running),
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = if (state.paused) colors.onSurfaceVariant else colors.primary,
@@ -323,7 +323,7 @@ private fun DialCard(state: AppState) {
                                     color = colors.onSurface,
                                 )
                                 Text(
-                                    text = "分",
+                                    text = stringResource(R.string.unit_minute_short),
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = colors.onSurfaceVariant,
@@ -332,7 +332,7 @@ private fun DialCard(state: AppState) {
                             }
                             Spacer(Modifier.height(8.dp))
                             Text(
-                                text = "准备开始",
+                                text = stringResource(R.string.dial_ready),
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = colors.primary,
@@ -361,22 +361,22 @@ private fun PrimaryButton(
     val action: () -> Unit
     when {
         state.ringing -> {
-            label = "关闭"
+            label = stringResource(R.string.action_stop_ring)
             action = onStop
         }
 
         state.isPlaying() -> {
-            label = "暂停"
+            label = stringResource(R.string.action_pause)
             action = onPause
         }
 
         state.isTimerRunning() -> {
-            label = "继续"
+            label = stringResource(R.string.action_resume)
             action = onResume
         }
 
         else -> {
-            label = "开始 ${state.intervalMinutes} 分钟"
+            label = stringResource(R.string.action_start_minutes, state.intervalMinutes)
             action = onStart
         }
     }
@@ -416,13 +416,13 @@ private fun PresetSection(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SectionTitle(
-            title = "档位",
-            subtitle = if (editing) "点 × 删除" else null,
+            title = stringResource(R.string.presets_title),
+            subtitle = if (editing) stringResource(R.string.presets_edit_hint) else null,
         )
         Spacer(Modifier.weight(1f))
         TextButton(onClick = { editing = !editing }) {
             Text(
-                text = if (editing) "完成" else "编辑",
+                text = if (editing) stringResource(R.string.presets_done) else stringResource(R.string.presets_edit),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
             )
@@ -460,7 +460,11 @@ private fun PresetSection(
 
     Spacer(Modifier.height(10.dp))
     Text(
-        text = "当前选中 ${state.intervalMinutes} 分钟 · 共 ${state.presets.size} 个档位",
+        text = stringResource(
+            R.string.presets_summary,
+            state.intervalMinutes,
+            state.presets.size,
+        ),
         style = MaterialTheme.typography.bodySmall,
         color = colors.onSurfaceVariant,
     )
@@ -496,7 +500,7 @@ private fun PresetChip(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "$minutes 分钟",
+            text = stringResource(R.string.minutes_value, minutes),
             fontSize = 14.sp,
             fontWeight = if (selected && !editing) FontWeight.Bold else FontWeight.Medium,
             color = if (selected && !editing) colors.onPrimary else colors.onSurface,
@@ -514,7 +518,7 @@ private fun PresetChip(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_close),
-                    contentDescription = "删除 $minutes 分钟档位",
+                    contentDescription = stringResource(R.string.cd_remove_preset, minutes),
                     tint = colors.onSurfaceVariant,
                     modifier = Modifier.size(12.dp),
                 )
@@ -534,7 +538,7 @@ private fun AddChip(onClick: () -> Unit) {
             .padding(horizontal = 18.dp, vertical = 11.dp),
     ) {
         Text(
-            text = "+ 自定义",
+            text = stringResource(R.string.presets_add),
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
             color = colors.onSurfaceVariant,
@@ -557,7 +561,7 @@ private fun AddPresetDialog(onDismiss: () -> Unit, onConfirm: (Int) -> Unit) {
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("添加档位") },
+        title = { Text(stringResource(R.string.presets_add_title)) },
         text = {
             Column {
                 OutlinedTextField(
@@ -566,7 +570,7 @@ private fun AddPresetDialog(onDismiss: () -> Unit, onConfirm: (Int) -> Unit) {
                         if (value.length <= 4 && value.all { it.isDigit() }) input = value
                     },
                     singleLine = true,
-                    label = { Text("分钟数") },
+                    label = { Text(stringResource(R.string.presets_add_label)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -574,17 +578,21 @@ private fun AddPresetDialog(onDismiss: () -> Unit, onConfirm: (Int) -> Unit) {
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = "范围 ${AppState.MIN_MINUTES} ~ ${AppState.MAX_MINUTES} 分钟",
+                    text = stringResource(
+                        R.string.presets_add_range,
+                        AppState.MIN_MINUTES,
+                        AppState.MAX_MINUTES,
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         },
         confirmButton = {
-            TextButton(onClick = { parsed?.let(onConfirm) }, enabled = valid) { Text("添加") }
+            TextButton(onClick = { parsed?.let(onConfirm) }, enabled = valid) { Text(stringResource(R.string.action_add)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("取消") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
         },
     )
 }
@@ -628,12 +636,10 @@ private fun BehaviorNote() {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(18.dp)) {
-            Text("怎么工作", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.note_title), fontSize = 15.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(6.dp))
             Text(
-                text = "点开始后由 Lap 自己计时，到点响铃、震动并点亮屏幕。\n\n" +
-                    "锁屏和通知栏的媒体卡片可以直接控制：播放键开始或继续、" +
-                    "暂停键暂停、停止键结束；进度条也能拖动，把剩余时间提前或推后。",
+                text = stringResource(R.string.note_body),
                 style = MaterialTheme.typography.bodySmall,
                 color = colors.onSurfaceVariant,
             )

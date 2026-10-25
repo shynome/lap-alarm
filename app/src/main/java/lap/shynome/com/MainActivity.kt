@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                     onAddPreset = { Lap.addPreset(this, it) },
                     onRemovePreset = { minutes ->
                         Lap.removePreset(this, minutes)
-                        Toast.makeText(this, "已删除 $minutes 分钟档位", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.toast_preset_removed, minutes), Toast.LENGTH_SHORT).show()
                     },
                 )
             }
@@ -124,7 +124,7 @@ class MainActivity : ComponentActivity() {
             !shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
         ) {
             // 已被永久拒绝，系统不会再弹框，只能引导去设置页
-            Toast.makeText(this, "请允许 Lap 发送通知，否则看不到倒计时控件", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.toast_need_notif), Toast.LENGTH_LONG).show()
             openNotificationSettings()
             return false
         }
@@ -143,12 +143,12 @@ class MainActivity : ComponentActivity() {
     private fun startTimerInternal() {
         notifGranted = notificationsEnabled()
         if (!exactAlarmGranted) {
-            Toast.makeText(this, "需要「闹钟和提醒」权限才能精确计时", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.toast_need_exact_alarm), Toast.LENGTH_LONG).show()
             openExactAlarmSettings()
             return
         }
         if (!Lap.startTimer(this)) {
-            Toast.makeText(this, "无法启动倒计时", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.toast_start_failed), Toast.LENGTH_LONG).show()
         }
     }
 }

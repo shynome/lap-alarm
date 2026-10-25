@@ -3,6 +3,7 @@ package lap.shynome.com.service
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.RingtoneManager
@@ -40,7 +41,12 @@ class RingService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // 复用同一条状态通知：前台服务接管它，结束时会自动降回普通通知
-        startForeground(Notifications.ID_STATUS, Notifications.buildNotification(this))
+        if (!startForegroundCompat()) {
+            // 用户回收了精确闹钟权限时系统会拒绝 systemExempted，此时静默退出即可
+            Notifications.update(this)
+            stopSelf()
+            return START_NOT_STICKY
+        }
         acquireWakeLock()
         playRingtone()
         startVibration()
@@ -59,6 +65,25 @@ class RingService : Service() {
         Lap.onRingStopped(this)
         super.onDestroy()
     }
+
+    /**
+     * 以 systemExempted 类型进入前台。
+     *
+     * 该类型要求应用持有 SCHEDULE_EXACT_ALARM 或 USE_EXACT_ALARM。
+     * 用户回收精确闹钟权限后（仅 SCHEDULE_EXACT_ALARM 可被回收），系统会拒绝本次调用。
+     */
+    private fun startForegroundCompat(): Boolean = runCatching {
+        val notification = Notifications.buildNotification(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(
+                Notifications.ID_STATUS,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED,
+            )
+        } else {
+            startForeground(Notifications.ID_STATUS, notification)
+        }
+    }.isSuccess
 
     private fun playRingtone() {
         val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)

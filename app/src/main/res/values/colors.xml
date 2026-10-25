@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="app_bg">#F6F7F5</color>
+    <color name="ring_bg">#F6F7F5</color>
+    <color name="ic_launcher_background">#0F766E</color>
+
+    <color name="notif_card">#FFFFFFFF</color>
+    <color name="notif_text_primary">#1A1C1A</color>
+    <color name="notif_text_secondary">#5F6360</color>
+    <color name="notif_btn">#F0F1EF</color>
+    <color name="notif_primary">#0F766E</color>
+    <color name="notif_primary_text">#FFFFFFFF</color>
+    <color name="notif_danger">#B3261E</color>
+</resources>

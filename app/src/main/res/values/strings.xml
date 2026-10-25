@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Lap</string>
+    <string name="app_name">Lap Alarm</string>
 
     <!-- Main screen -->
     <string name="tagline">One lap at a time</string>
@@ -37,12 +37,12 @@
 
     <!-- How it works -->
     <string name="note_title">How it works</string>
-    <string name="note_body">After you tap start, Lap keeps time itself and rings, vibrates and wakes the screen when time is up.\n\nThe media card in the notification shade and lock screen controls it directly: play to start or resume, pause to hold, stop to end. You can also drag the progress bar to move the remaining time forward or back.</string>
+    <string name="note_body">After you tap start, Lap Alarm keeps time itself and rings, vibrates and wakes the screen when time is up.\n\nThe media card in the notification shade and lock screen controls it directly: play to start or resume, pause to hold, stop to end. You can also drag the progress bar to move the remaining time forward or back.</string>
 
     <!-- Notifications -->
     <string name="channel_status">Timer controls</string>
     <string name="channel_status_desc">Persistent notification to start or pause the timer</string>
-    <string name="notif_title">Lap · %1$d min</string>
+    <string name="notif_title">Lap Alarm · %1$d min</string>
     <string name="notif_subtitle">Tap play to start the timer</string>
     <string name="notif_subtitle_paused">Tap play to restart</string>
     <string name="media_subtitle">Tap play to start the timer</string>
@@ -60,7 +60,7 @@
 
     <!-- Toasts -->
     <string name="toast_preset_removed">Removed the %1$d min preset</string>
-    <string name="toast_need_notif">Allow Lap to send notifications, otherwise the timer controls can\'t be shown</string>
+    <string name="toast_need_notif">Allow Lap Alarm to send notifications, otherwise the timer controls can\'t be shown</string>
     <string name="toast_need_exact_alarm">The Alarms &amp; reminders permission is required for precise timing</string>
     <string name="toast_start_failed">Could not start the timer</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Lap</string>
+    <string name="app_name">Lap Alarm</string>
 
     <!-- 主界面 -->
     <string name="tagline">专注一圈</string>
@@ -37,12 +37,12 @@
 
     <!-- 说明 -->
     <string name="note_title">怎么工作</string>
-    <string name="note_body">点开始后由 Lap 自己计时，到点响铃、震动并点亮屏幕。\n\n锁屏和通知栏的媒体卡片可以直接控制：播放键开始或继续、暂停键暂停、停止键结束；进度条也能拖动，把剩余时间提前或推后。</string>
+    <string name="note_body">点开始后由 Lap Alarm 自己计时，到点响铃、震动并点亮屏幕。\n\n锁屏和通知栏的媒体卡片可以直接控制：播放键开始或继续、暂停键暂停、停止键结束；进度条也能拖动，把剩余时间提前或推后。</string>
 
     <!-- 通知 -->
     <string name="channel_status">倒计时入口</string>
     <string name="channel_status_desc">常驻通知，一键启动或暂停倒计时</string>
-    <string name="notif_title">Lap · %1$d 分钟</string>
+    <string name="notif_title">Lap Alarm · %1$d 分钟</string>
     <string name="notif_subtitle">点击播放开始倒计时</string>
     <string name="notif_subtitle_paused">点播放重新开始</string>
     <string name="media_subtitle">点击播放开始倒计时</string>
@@ -60,7 +60,7 @@
 
     <!-- Toast -->
     <string name="toast_preset_removed">已删除 %1$d 分钟档位</string>
-    <string name="toast_need_notif">请允许 Lap 发送通知，否则看不到倒计时控件</string>
+    <string name="toast_need_notif">请允许 Lap Alarm 发送通知，否则看不到倒计时控件</string>
     <string name="toast_need_exact_alarm">需要「闹钟和提醒」权限才能精确计时</string>
     <string name="toast_start_failed">无法启动倒计时</string>
 </resources>

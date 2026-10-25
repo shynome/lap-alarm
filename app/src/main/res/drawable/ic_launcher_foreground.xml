@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   启动图标前景：一圈跑道。
-  浅色轨道 + 白色 270° 进度弧 + 起跑点，呼应 Lap「再跑一圈」。
-  圆心(54,54) 半径 31、描边 9，外径 71，几乎填满 72 安全区。
+  深青底（#0F766E）+ 白色图形，与界面主色一致。
+  比例对齐界内 Canvas（环占容器 60%，描边/半径 = 0.24）：
+  半径 22、描边 5.3、起跑点 4，外径 49.3，四周留白明显。
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -12,20 +13,20 @@
 
     <!-- 轨道：完整圆环，低透明度 -->
     <path
-        android:pathData="M54,23 a31,31 0 1,0 0,62 a31,31 0 1,0 0,-62"
+        android:pathData="M54,32 a22,22 0 1,0 0,44 a22,22 0 1,0 0,-44"
         android:strokeColor="#59FFFFFF"
-        android:strokeWidth="9"
+        android:strokeWidth="5.3"
         android:strokeLineCap="round" />
 
-    <!-- 进度：从顶点顺时针 270°，留出右下角的缺口 -->
+    <!-- 进度：从顶点顺时针 270°，缺口留在左上 -->
     <path
-        android:pathData="M54,23 a31,31 0 1,1 -31,31"
+        android:pathData="M54,32 a22,22 0 1,1 -22,22"
         android:strokeColor="#FFFFFFFF"
-        android:strokeWidth="9"
+        android:strokeWidth="5.3"
         android:strokeLineCap="round" />
 
     <!-- 起跑点 -->
     <path
-        android:pathData="M54,23 m-12,0 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0"
+        android:pathData="M54,32 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"
         android:fillColor="#FFFFFFFF" />
 </vector>

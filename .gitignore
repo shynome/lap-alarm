@@ -31,10 +31,6 @@ Thumbs.db
 # 日志
 *.log
 
-# 签名信息（含密码），不要提交
-keystore.properties
+# 密钥库：防止误提交
 *.jks
 *.keystore
-
-# 本机构建脚本，只有本机用得到
-release.sh

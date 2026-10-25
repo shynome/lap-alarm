@@ -178,7 +178,7 @@ private fun BrandHeader() {
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = "循环倒计时",
+                text = "专注一圈",
                 style = MaterialTheme.typography.bodySmall,
                 color = colors.onSurfaceVariant,
             )

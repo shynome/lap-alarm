@@ -35,3 +35,6 @@ Thumbs.db
 keystore.properties
 *.jks
 *.keystore
+
+# 本机构建脚本，只有本机用得到
+release.sh

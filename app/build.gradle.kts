@@ -12,13 +12,16 @@ android {
         applicationId = "lap.shynome.com"
         minSdk = 26
         targetSdk = 36
-        versionCode = 4
-        versionName = "0.1.2"
+        versionCode = 5
+        versionName = "0.1.3"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // Play 要求 DEX 各维度优化率 ≥ 25%，必须开 R8；
+            // 未开混淆时混淆率为 1%，会被判定「代码优化程度未达阈值」。
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }

@@ -2,6 +2,17 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [0.1.3] - 2026-10-28
+
+### 构建
+
+- 开启 R8 混淆与资源压缩（`isMinifyEnabled` / `isShrinkResources`），修复 Play
+  Console 报出的「DEX 代码优化程度未达阈值」——此前 release 包未混淆，混淆率
+  仅 1%，低于 25% 门槛。
+- 补充 ProGuard 规则：保留 `SourceFile` / `LineNumberTable` 并把源文件名归一化，
+  混淆后崩溃堆栈仍可定位，同时减小包体。
+- `versionCode` 4 → 5，`versionName` 0.1.2 → 0.1.3。
+
 ## [0.1.2] - 2026-10-28
 
 ### 修复

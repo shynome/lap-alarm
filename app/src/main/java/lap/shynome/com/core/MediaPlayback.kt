@@ -26,7 +26,7 @@ object MediaPlayback {
             setCallback(object : MediaSessionCompat.Callback() {
 
                 /**
-                 * 快进键：空闲→开新一轮，暂停中→继续，响铃中→关闭铃声。
+                 * 播放键：空闲→开新一轮，暂停中→继续。
                  *
                  * 只有暂停的这一轮仍属于当前档位才能继续；被切档位搁置的旧一轮不带剩余时间回来，
                  * 直接按当前档位的完整时长重新开一轮。
@@ -34,15 +34,22 @@ object MediaPlayback {
                 override fun onPlay() {
                     val state = Store.state.value
                     when {
+                        // 响铃中正常只会下发「暂停」；万一收到播放，兜底只关铃声，不直接开新一轮
                         state.ringing -> Lap.stopTimer(app)
                         state.paused && state.isTimerRunning() -> Lap.resumeTimer(app)
                         else -> Lap.startTimer(app)
                     }
                 }
 
-                /** 暂停。自建引擎是真暂停，系统时钟引擎只是切换显示。 */
+                /**
+                 * 暂停键。
+                 *
+                 * 响铃中锁屏显示的是 ⏸，点它是「关闭铃声」：铃声停掉后卡片回到 ▶，
+                 * 再点一次才会按当前档位重新开一轮，避免手滑一下就直接重新响。
+                 */
                 override fun onPause() {
-                    Lap.pauseTimer(app)
+                    val state = Store.state.value
+                    if (state.ringing) Lap.stopTimer(app) else Lap.pauseTimer(app)
                 }
 
                 /** 拖动进度条：把计时跳到对应位置。 */
@@ -125,7 +132,15 @@ object MediaPlayback {
                 .build(),
         )
 
-        // 正在计时且未手动切到暂停 → PLAYING（锁屏显示 ⏸）；否则 PAUSED（显示 ▶）
+        // 计时中、响铃中 → PLAYING（锁屏显示 ⏸）；其余 PAUSED（显示 ▶）。
+        // 响铃时也上报 PLAYING，是为了锁屏那颗键先当「关闭铃声」用：
+        // 点它只停铃、卡片随即回到 ▶，再点 ▶ 才重新开一轮。
+        // 速度给 0，响铃期间进度条不会被系统继续往前推。
+        val stateForUi = if (playing || state.ringing) {
+            PlaybackStateCompat.STATE_PLAYING
+        } else {
+            PlaybackStateCompat.STATE_PAUSED
+        }
         s.setPlaybackState(
             PlaybackStateCompat.Builder()
                 .setActions(
@@ -138,11 +153,7 @@ object MediaPlayback {
                         PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS,
                 )
                 .setState(
-                    when {
-                        playing -> PlaybackStateCompat.STATE_PLAYING
-                        state.ringing -> PlaybackStateCompat.STATE_PAUSED
-                        else -> PlaybackStateCompat.STATE_PAUSED
-                    },
+                    stateForUi,
                     elapsedMs,
                     if (playing) 1f else 0f,
                 )

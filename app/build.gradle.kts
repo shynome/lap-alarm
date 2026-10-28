@@ -12,8 +12,8 @@ android {
         applicationId = "lap.shynome.com"
         minSdk = 26
         targetSdk = 36
-        versionCode = 5
-        versionName = "0.1.3"
+        versionCode = 6
+        versionName = "0.1.4"
     }
 
     buildTypes {

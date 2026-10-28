@@ -4,7 +4,7 @@
 
 - 包名：`lap.shynome.com`
 - Kotlin + Jetpack Compose（Material 3）
-- minSdk 26 ｜ targetSdk 34 ｜ compileSdk 35
+- minSdk 26 ｜ targetSdk 36 ｜ compileSdk 36
 
 ---
 
@@ -79,7 +79,7 @@ D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
 | `SCHEDULE_EXACT_ALARM` / `USE_EXACT_ALARM` | 精确闹钟 |
 | `VIBRATE` | 响铃振动 |
 | `WAKE_LOCK` | 响铃时点亮屏幕 |
-| `FOREGROUND_SERVICE` + `SPECIAL_USE` | 响铃期间的前台服务 |
+| `FOREGROUND_SERVICE` + `SYSTEM_EXEMPTED` | 响铃期间的前台服务（需持有精确闹钟权限） |
 
 通知权限在点击「开始」时才申请，不在一打开应用就弹窗；授权后会自动继续启动刚才那一轮。
 
@@ -101,7 +101,7 @@ D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
 
 - **不做全屏响铃页**：`fullScreenIntent` 在目标机型上被系统拒绝（`FSI_REQUESTED_BUT_DENIED`），因此响铃表现为通知 + 铃声 + 亮屏
 - **静音仍会响**：铃声走 `USAGE_ALARM`，媒体音量调到 0 也照样响，要静音需调「闹钟音量」或开启勿扰
-- **切换档位不影响当前轮**：`runningMinutes` 与 `intervalMinutes` 分开保存，改档位只作用于下一轮
+- **切档位的行为随状态而变**：计时中切档位会作废旧一轮、按新时长重新开始；暂停中切档位只替换档位并保留冻结的剩余时间
 
 ---
 

@@ -2,6 +2,25 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [0.1.5] - 2026-10-28
+
+### 构建
+
+- 升级 Android Gradle Plugin 8.6.0 → 9.0.1、Gradle 8.7 → 9.1.0，解决 Play Console 的
+  「R8 配置可能导致内存用量增加和性能降低：请将 Android Gradle plugin 升级到 9.0 或更高版本」。
+- 迁移到 AGP 内置 Kotlin（built-in Kotlin）：移除 `org.jetbrains.kotlin.android` 插件与
+  `kotlinOptions`，Compose 编译器插件对齐到 AGP 依赖的 KGP 2.2.10。
+- 移除 `android.suppressUnsupportedCompileSdk=36`：AGP 9 原生支持 compileSdk 36。
+
+### 修复
+
+- 删除 `values-night/colors.xml` 中无引用的 `ring_bg`：AGP 9 的 lint 会把它判为
+  `MissingDefaultResource` 致命错误，导致 `bundleRelease`（即 Play 上传包）构建失败。
+
+### 版本
+
+- `versionCode` 6 → 7，`versionName` 0.1.4 → 0.1.5。
+
 ## [0.1.4] - 2026-10-28
 
 ### 修复

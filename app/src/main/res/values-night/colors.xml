@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="app_bg">#111413</color>
-    <color name="ring_bg">#0B0E0D</color>
 
     <color name="notif_card">#FF24272A</color>
     <color name="notif_text_primary">#F1F3F1</color>

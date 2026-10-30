@@ -1,7 +1,7 @@
-package lap.shynome.com
+package com.shynome.lap
 
 import android.app.Application
-import lap.shynome.com.core.Lap
+import com.shynome.lap.core.Lap
 
 class LapApp : Application() {
     override fun onCreate() {

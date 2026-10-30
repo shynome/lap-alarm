@@ -1,4 +1,4 @@
-package lap.shynome.com
+package com.shynome.lap
 
 import android.Manifest
 import android.content.Intent
@@ -18,11 +18,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import lap.shynome.com.core.AlarmScheduler
-import lap.shynome.com.core.Lap
-import lap.shynome.com.core.Store
-import lap.shynome.com.ui.LapScreen
-import lap.shynome.com.ui.theme.LapTheme
+import com.shynome.lap.core.AlarmScheduler
+import com.shynome.lap.core.Lap
+import com.shynome.lap.core.Store
+import com.shynome.lap.ui.LapScreen
+import com.shynome.lap.ui.theme.LapTheme
 
 class MainActivity : ComponentActivity() {
 

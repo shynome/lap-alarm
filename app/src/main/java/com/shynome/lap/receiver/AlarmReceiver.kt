@@ -1,10 +1,10 @@
-package lap.shynome.com.receiver
+package com.shynome.lap.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import lap.shynome.com.core.Lap
-import lap.shynome.com.service.RingService
+import com.shynome.lap.core.Lap
+import com.shynome.lap.service.RingService
 
 /**
  * 自建引擎到点时的入口。只负责把响铃服务拉起来，其余逻辑都在 [RingService] 里。

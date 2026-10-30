@@ -1,4 +1,4 @@
-package lap.shynome.com.service
+package com.shynome.lap.service
 
 import android.app.Service
 import android.content.Context
@@ -15,8 +15,8 @@ import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import lap.shynome.com.core.Lap
-import lap.shynome.com.core.Notifications
+import com.shynome.lap.core.Lap
+import com.shynome.lap.core.Notifications
 
 /**
  * 自建引擎的响铃服务。

@@ -1,4 +1,4 @@
-package lap.shynome.com.core
+package com.shynome.lap.core
 
 import java.util.Locale
 

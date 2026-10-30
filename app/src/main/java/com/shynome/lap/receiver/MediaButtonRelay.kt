@@ -1,10 +1,10 @@
-package lap.shynome.com.receiver
+package com.shynome.lap.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.view.KeyEvent
-import lap.shynome.com.core.MediaPlayback
+import com.shynome.lap.core.MediaPlayback
 
 /**
  * 把通知按钮发出的媒体按键转发给 MediaSession。

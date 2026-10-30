@@ -2,7 +2,7 @@
 
 循环倒计时。一键把「接下来 N 分钟」变成一轮倒计时，锁屏和通知栏都能直接控制。
 
-- 包名：`lap.shynome.com`
+- 包名：`com.shynome.lap`
 - Kotlin + Jetpack Compose（Material 3）
 - minSdk 26 ｜ targetSdk 36 ｜ compileSdk 36
 
@@ -27,7 +27,7 @@
 ```
 D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
   Intent { act=android.intent.action.SET_TIMER ... cmp=com.android.deskclock/.HandleSetAlarmActivity }
-  pkg : lap.shynome.com  uid : 10317  tuid : 10136   // 10136 = com.miui.home
+  pkg : com.shynome.lap  uid : 10317  tuid : 10136   // 10136 = com.miui.home
 ```
 
 排查过的路，全部无效：

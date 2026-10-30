@@ -1,7 +1,7 @@
-package lap.shynome.com.core
+package com.shynome.lap.core
 
 import android.content.Context
-import lap.shynome.com.service.RingService
+import com.shynome.lap.service.RingService
 
 /**
  * 业务门面：档位维护与计时控制。

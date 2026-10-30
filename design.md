@@ -2,7 +2,7 @@
 
 循环倒计时。一键把「接下来 N 分钟」变成一轮倒计时，锁屏与通知栏都能控制。
 
-- 包名 / applicationId：`lap.shynome.com`
+- 包名 / applicationId：`com.shynome.lap`
 - 语言：Kotlin + Jetpack Compose（Material 3）
 - minSdk 26 ｜ targetSdk 34 ｜ compileSdk 35
 - 目标机型：小米 HyperOS（实测 24115RA8EC / Android 16）
@@ -49,7 +49,7 @@ idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, ...}]
 ```
 D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
   Intent { act=android.intent.action.SET_TIMER ... cmp=com.android.deskclock/.HandleSetAlarmActivity }
-  pkg : lap.shynome.com  uid : 10317  tuid : 10136     // 10136 = com.miui.home
+  pkg : com.shynome.lap  uid : 10317  tuid : 10136     // 10136 = com.miui.home
 ```
 
 排查过程：
@@ -122,7 +122,7 @@ D/ActivityStarterImpl: MIUILOG- Permission Denied Activity :
 ## 4. 组件
 
 ```
-lap.shynome.com
+com.shynome.lap
 ├── LapApp               Application：初始化 Store 与通知渠道
 ├── MainActivity            Compose 主界面：档位选择 + 计时控制 + 权限引导
 ├── core/

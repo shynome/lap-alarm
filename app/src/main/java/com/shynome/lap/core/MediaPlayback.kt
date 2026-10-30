@@ -1,11 +1,11 @@
-package lap.shynome.com.core
+package com.shynome.lap.core
 
 import android.content.Context
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.graphics.drawable.toBitmap
-import lap.shynome.com.R
+import com.shynome.lap.R
 
 /**
  * 把「启动倒计时」伪装成一个媒体会话，让系统在锁屏上渲染媒体控制卡。

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "lap.shynome.com"
+    namespace = "com.shynome.lap"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "lap.shynome.com"
+        applicationId = "com.shynome.lap"
         minSdk = 26
         targetSdk = 36
         versionCode = 7

@@ -1,4 +1,4 @@
-package lap.shynome.com.core
+package com.shynome.lap.core
 
 import android.annotation.SuppressLint
 import android.app.ActivityOptions
@@ -14,10 +14,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media.app.NotificationCompat.MediaStyle
-import lap.shynome.com.MainActivity
-import lap.shynome.com.R
-import lap.shynome.com.receiver.ControlReceiver
-import lap.shynome.com.receiver.MediaButtonRelay
+import com.shynome.lap.MainActivity
+import com.shynome.lap.R
+import com.shynome.lap.receiver.ControlReceiver
+import com.shynome.lap.receiver.MediaButtonRelay
 import android.view.KeyEvent
 
 /**

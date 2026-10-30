@@ -1,9 +1,9 @@
-package lap.shynome.com.receiver
+package com.shynome.lap.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import lap.shynome.com.core.Lap
+import com.shynome.lap.core.Lap
 
 /**
  * 通知按钮里「切档位」这类不需要启动界面动作用广播处理，

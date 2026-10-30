@@ -1,4 +1,4 @@
-package lap.shynome.com.ui
+package com.shynome.lap.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -60,9 +60,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import lap.shynome.com.R
-import lap.shynome.com.core.AppState
-import lap.shynome.com.core.formatRemaining
+import com.shynome.lap.R
+import com.shynome.lap.core.AppState
+import com.shynome.lap.core.formatRemaining
 
 @Composable
 fun LapScreen(

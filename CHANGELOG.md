@@ -2,6 +2,22 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [0.1.6] - 2026-10-30
+
+### 变更
+
+- 修正包名：`lap.shynome.com` → `com.shynome.lap`。原写法是域名正序，不符合
+  Android 反向域名规范。
+- 源码目录迁移到 `app/src/main/java/com/shynome/lap/`，文件命名与内部类名统一为
+  `LapApp` / `Lap` / `LapScreen`。
+
+> ⚠️ 破坏性变更：`applicationId` 改变后无法覆盖安装或升级，旧版本需卸载重装，
+> 通知与精确闹钟权限需重新授予；旧包名构建的 `app-release.aab` 同步作废。
+
+### 构建
+
+- `versionCode` 7 → 8，`versionName` 0.1.5 → 0.1.6。
+
 ## [0.1.5] - 2026-10-28
 
 ### 构建
